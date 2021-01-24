@@ -1,7 +1,7 @@
 class Mutation:
 
-    def __init__(self, chromosome):
-        self.chromosome = chromosome
+    def set_child(self, child: list):
+        self.child = child
 
     def apply(self, ):
         pass

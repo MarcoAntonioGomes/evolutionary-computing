@@ -1,4 +1,6 @@
+import random
 from copy import deepcopy
+from random import sample
 
 import numpy as np
 
@@ -12,3 +14,11 @@ if __name__ == '__main__':
     print(a[1, 2])
     x = np.empty([8])
     print(x)
+    print(sample(range(0, 8), 8))
+    print(random.random())
+    e = [1, 3, 5, 2, 6, 4, 7, 8, ]
+    f = [1, 3, 5, 2, 6, 4, 7, 8, ]
+    c = a.shape[1]
+    g = np.array([e, f])
+    print(a)
+    print(g)
