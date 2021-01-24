@@ -1,5 +1,5 @@
 
-class GaInputs:
+class GeneticAlgorithmStructure:
 
     populationSize = 100
     maximumNumberOfGenerations = 10
