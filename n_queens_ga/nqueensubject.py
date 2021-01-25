@@ -5,6 +5,6 @@ from GeneticAlgorithmComponents.subjects.subject import Subject
 
 class NQueenSubject(Subject):
 
-    def __init__(self, queens_positions: list, fitness):
+    def __init__(self, queens_positions: list[int], fitness):
         self.queens_positions = queens_positions
-        self().__init__(fitness)
+        super().__init__(fitness)

@@ -1,3 +1,5 @@
+from collections import defaultdict, deque
+
 from GeneticAlgorithmComponents.crossovers.crossover import Crossover
 from GeneticAlgorithmComponents.mutations.mutation import Mutation
 from GeneticAlgorithmComponents.selections.selectionmethods import SelectionMethods
@@ -6,6 +8,7 @@ from GeneticAlgorithmComponents.subjects.subject import Subject
 
 class GeneticAlgorithmStructure:
     population = list[Subject]
+
 
     def __init__(self, population_size: int,
                  maximum_number_of_generations: int,
@@ -21,6 +24,7 @@ class GeneticAlgorithmStructure:
         self.mutation = mutation
         self.crossover = crossover
         self.selection = selection
+        self.best_solution = []
 
     def init_population(self):
         pass

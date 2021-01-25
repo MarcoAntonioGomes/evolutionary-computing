@@ -22,3 +22,8 @@ if __name__ == '__main__':
     g = np.array([e, f])
     print(a)
     print(g)
+    print( np.zeros((8,8)))
+    print(random.randint(0, 7))
+    for i in range(8):
+        print(i)
+    print(np.zeros((8,8)))
