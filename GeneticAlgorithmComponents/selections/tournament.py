@@ -4,10 +4,12 @@ from GeneticAlgorithmComponents.selections.selectionmethods import SelectionMeth
 from operator import attrgetter
 
 from GeneticAlgorithmComponents.subjects.subject import Subject
+from random import SystemRandom
 
 
 class Tournament(SelectionMethods):
     subjects = list[Subject]
+    random = SystemRandom()
 
     def __init__(self, k):
         self.k = k
@@ -22,10 +24,10 @@ class Tournament(SelectionMethods):
             tournament_candidates: Tournament.subjects
             tournament_candidates = list()
             while count <= self.k:
-                subject_pos = randint(0, u - 1)
+                subject_pos = self.random.randint(0, u - 1)
                 tournament_candidates.append(self.population[subject_pos])
                 count = count + 1
-            winning_candidate = min(tournament_candidates, key=attrgetter('fitness'))
+            winning_candidate = max(tournament_candidates, key=attrgetter('fitness'))
             mating_pool.append(winning_candidate)
 
             current_member = current_member + 1

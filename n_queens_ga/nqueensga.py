@@ -15,6 +15,8 @@ def calculate_max_quantity_of_xeques():
 
 class NQueensGa(GeneticAlgorithmStructure):
 
+    M = 1000
+
     def __init__(self, population_size: int, maximum_number_of_generations: int, crossover_probability: float,
                  mutation_probability: float, mutation: Mutation, crossover: Crossover, selection: SelectionMethods):
         super().__init__(population_size, maximum_number_of_generations, crossover_probability, mutation_probability,
@@ -41,7 +43,7 @@ class NQueensGa(GeneticAlgorithmStructure):
                 if abs(i - j) == abs(solution[i] - solution[j]) and i != j:
                     f = f + 1
         f = f / 2
-        return f
+        return self.M - f
 
     def run_ga(self):
         count = 1
@@ -51,7 +53,7 @@ class NQueensGa(GeneticAlgorithmStructure):
             print("GERAÇÃO: ", count)
             self.selection.set_population(self.population)
             mating_pool = self.selection.select()
-            mating_pool.sort(key=lambda x: x.fitness)
+            mating_pool.sort(key=lambda x: x.fitness, reverse=True)
             father_1 = mating_pool[0].queens_positions
             father_2 = mating_pool[1].queens_positions
             if random.random() < self.crossover_probability:
@@ -66,10 +68,10 @@ class NQueensGa(GeneticAlgorithmStructure):
 
                 child_1_fitness = self.calculate_candidate_fitness(self.child_1)
                 child_2_fitness = self.calculate_candidate_fitness(self.child_2)
-                if int(child_1_fitness) == 0:
+                if int(child_1_fitness) == self.M:
                     best_solution_is_founded = True
                     self.best_solution = self.child_1
-                if int(child_2_fitness) == 0:
+                if int(child_2_fitness) == self.M:
                     best_solution_is_founded = True
                     self.best_solution = self.child_2
 
@@ -82,7 +84,7 @@ class NQueensGa(GeneticAlgorithmStructure):
             count = count + 1
 
     def select_survivors(self):
-        self.population.sort(key=lambda x: x.fitness)
+        self.population.sort(key=lambda x: x.fitness, reverse=True)
         self.population.pop()
         self.population.pop()
 

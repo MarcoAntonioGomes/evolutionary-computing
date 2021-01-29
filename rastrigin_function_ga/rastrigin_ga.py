@@ -1,0 +1,4 @@
+from GeneticAlgorithmComponents.geneticalgorithmstructure import GeneticAlgorithmStructure
+
+
+class RastriginGa(GeneticAlgorithmStructure):

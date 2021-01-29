@@ -11,10 +11,10 @@ from n_queens_ga.nqueensga import NQueensGa
 
 if __name__ == '__main__':
 
-    population_size = 30
+    population_size = 100
     maximum_number_of_generations = 10000
-    crossover_probability = 0.6
-    mutation_probability = 0.6
+    crossover_probability = 0.99
+    mutation_probability = 0.8
     mutation = SwapMutation()
     crossover = CutAndCrossfillCrossover()
     selection = Tournament(10)
