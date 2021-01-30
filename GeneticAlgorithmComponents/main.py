@@ -27,3 +27,8 @@ if __name__ == '__main__':
     for i in range(8):
         print(i)
     print(np.zeros((8,8)))
+    print( f'{6:010b}')
+    q = 10
+    n = 5
+    print(bin(n)[2:].zfill(q))
+    print(10**2)

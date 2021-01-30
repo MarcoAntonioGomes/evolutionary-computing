@@ -15,7 +15,6 @@ class Tournament(SelectionMethods):
         self.k = k
 
     def select(self, ) -> list:
-        print("---- EXECUTANDO A SELEÇÃO PELO MÉTODO: TORNEIO  -------")
         current_member = 1
         u = len(self.population)
         mating_pool = []
