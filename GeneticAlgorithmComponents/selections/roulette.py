@@ -19,16 +19,23 @@ class Roulette(SelectionMethods):
         subjects_probabilities = self.calculate_subjects_probabilities()
         while current_member < self.k:
             r = self.random.random()
+            r = float("{:.2f}".format(r))
             i = 0
             while subjects_probabilities[i] < r:
+                if i == len(subjects_probabilities)-1:
+                    break
                 i = i + 1
+
             mating_pool.append(self.population[i])
             current_member = current_member + 1
         return mating_pool
 
     def calculate_subjects_probabilities(self):
-        fitness_total = sum(self.population, key=attrgetter('fitness'))
+        self.population.sort(key=lambda x: x.fitness)
+        fitness_total = sum(x.fitness for x in self.population)
         subjects_probabilities = list()
+        previous_probability = 0.0
         for i in range(len(self.population)):
-            subjects_probabilities.append(self.population[i].fitness / fitness_total)
+            previous_probability = previous_probability + float("{:.2f}".format(self.population[i].fitness / fitness_total))
+            subjects_probabilities.append(float("{:.2f}".format(previous_probability)))
         return subjects_probabilities

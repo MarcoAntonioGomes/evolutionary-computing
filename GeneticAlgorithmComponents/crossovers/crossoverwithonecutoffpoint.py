@@ -16,21 +16,21 @@ class CrossoverWithOneCutoffPoint(Crossover):
             quantity_of_bits = len(variable_i_father)
             cutoff_point = self.random.randint(0, (quantity_of_bits - 1))
 
-            variable_i_children_1 = list()
-            variable_i_children_2 = list()
-            for j in range(cutoff_point):
-                variable_i_children_1.append(variable_i_father[j])
-                variable_i_children_2.append(variable_i_mother[j])
+            variable_i_children_1 = None
+            variable_i_children_2 = None
+
+            variable_i_children_1 = variable_i_father[0:cutoff_point]
+            variable_i_children_2 = variable_i_mother[0:cutoff_point]
 
             for k in range(cutoff_point, quantity_of_bits):
                 if variable_i_father[k] == '1':
-                    variable_i_children_1.append('0')
+                    variable_i_children_1 = variable_i_children_1 + '0'
                 else:
-                    variable_i_children_1.append('1')
+                    variable_i_children_1 = variable_i_children_1 + '1'
                 if variable_i_mother[k] == '1':
-                    variable_i_children_2.append('0')
+                    variable_i_children_2 = variable_i_children_2 + '0'
                 else:
-                    variable_i_children_2.append('1')
+                    variable_i_children_2 = variable_i_children_2 + '1'
             children_1.append(variable_i_children_1)
             children_2.append(variable_i_children_2)
         return Offspring(children_1, children_2)

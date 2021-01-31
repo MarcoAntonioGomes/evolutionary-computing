@@ -14,11 +14,10 @@ def calculate_quantity_of_bits(precision: float, xmax: float, xmin: float):
 
 class RastriginGa(GeneticAlgorithmStructure):
     random = SystemRandom()
-    M = 10000000
 
     def __init__(self, population_size: int, maximum_number_of_generations: int, crossover_probability: float,
                  mutation_probability: float, mutation: Mutation, crossover: Crossover, selection_1: SelectionMethods,
-                 nvar: int, precision: float, xmin: float, xmax: float, selection_2: SelectionMethods):
+                 nvar: int, precision: float, xmin: float, xmax: float, selection_2: SelectionMethods, c_max):
 
         super().__init__(population_size, maximum_number_of_generations, crossover_probability, mutation_probability,
                          mutation, crossover, selection_1)
@@ -29,6 +28,7 @@ class RastriginGa(GeneticAlgorithmStructure):
         self.quantity_of_bits = calculate_quantity_of_bits(precision, self.xmax, self.xmin)
         self.children_1 = None
         self.children_2 = None
+        self.c_max = c_max
 
     def init_population(self):
 
@@ -44,7 +44,7 @@ class RastriginGa(GeneticAlgorithmStructure):
                 sorted_numbers.append(sorted_number)
                 if count_nvar != 1:
                     while sorted_number in sorted_numbers:
-                        sorted_number = self.random.randint(0, self.quantity_of_bits - 1)
+                        sorted_number = self.random.randint(0, (self.quantity_of_bits ** 2) - 1)
                     sorted_numbers.append(sorted_number)
                 binary_string.append(bin(sorted_number)[2:].zfill(self.quantity_of_bits))
                 count_nvar = count_nvar + 1
@@ -66,20 +66,20 @@ class RastriginGa(GeneticAlgorithmStructure):
         return self.xmin + ((self.xmax - self.xmin) * int(binary_value_in_xi, 2)) / ((self.quantity_of_bits ** 2) - 1)
 
     def normalize_for_maximization(self, value):
-        return self.M - value
+        if self.c_max < value:
+            return value
+        return self.c_max - value
 
     def run_ga(self):
         count = 1
         best_solution_is_founded = False
         while count <= self.maximum_number_of_generations:
 
-            self.selection.set_population(self.population)
-
             father = None
             mother = None
 
-            if self.random < 0.50:
-
+            if self.random.random() < 0.50:
+                self.selection.set_population(self.population)
                 mating_pool_1 = self.selection.select()
                 mating_pool_1.sort(key=lambda x: x.fitness, reverse=True)
                 father = mating_pool_1[0].binary_string
@@ -88,6 +88,7 @@ class RastriginGa(GeneticAlgorithmStructure):
                 mother = mating_pool_1[0].binary_string
 
             else:
+                self.selection_2.set_population(self.population)
                 mating_pool_1 = self.selection_2.select()
                 mating_pool_1.sort(key=lambda x: x.fitness, reverse=True)
                 father = mating_pool_1[0].binary_string
@@ -107,10 +108,10 @@ class RastriginGa(GeneticAlgorithmStructure):
 
                 child_1_fitness = self.normalize_for_maximization(self.function_rastrigin(self.children_1))
                 child_2_fitness = self.normalize_for_maximization(self.function_rastrigin(self.children_2))
-                if int(child_1_fitness) == self.M:
+                if int(child_1_fitness) == self.c_max:
                     best_solution_is_founded = True
                     self.best_solution = self.children_1
-                if int(child_2_fitness) == self.M:
+                if int(child_2_fitness) == self.c_max:
                     best_solution_is_founded = True
                     self.best_solution = self.children_2
 
@@ -123,6 +124,10 @@ class RastriginGa(GeneticAlgorithmStructure):
             count = count + 1
 
     def select_survivors(self):
-        self.population.sort(key=lambda x: x.fitness, reverse=True)
+        self.population.sort(key=lambda x: x.fitness)
         self.population.pop()
         self.population.pop()
+
+    def select_the_best_subject(self):
+        self.population.sort(key=lambda x: x.fitness)
+        return self.population[0]
