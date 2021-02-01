@@ -13,7 +13,6 @@ class CutAndCrossfillCrossover(Crossover):
     random = SystemRandom()
 
     def cross(self, parents) -> Offspring:
-        print("-------- EXECUTANDO O CRUZAMENTO  -------")
         seed(1)
         n = parents.shape[1]
         offspring = Offspring(np.zeros((2, n), dtype=int))

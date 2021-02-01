@@ -11,7 +11,6 @@ class SwapMutation(Mutation):
     random = SystemRandom()
 
     def apply(self, ):
-        print("------ EXECUTANDO A MUTAÇÃO: TROCA DE CROMOSSOMOS  -------")
         n = len(self.child)
         x = self.random.randint(0, (n - 1))
         y = self.random.randint(0, (n - 1))

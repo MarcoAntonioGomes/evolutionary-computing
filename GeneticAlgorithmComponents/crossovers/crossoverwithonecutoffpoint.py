@@ -2,6 +2,8 @@ from GeneticAlgorithmComponents.crossovers.crossover import Crossover
 from GeneticAlgorithmComponents.offspring import Offspring
 from random import SystemRandom
 
+from GeneticAlgorithmComponents.offspringrastrigin import OffspringRastrigin
+
 
 class CrossoverWithOneCutoffPoint(Crossover):
     random = SystemRandom()
@@ -33,4 +35,4 @@ class CrossoverWithOneCutoffPoint(Crossover):
                     variable_i_children_2 = variable_i_children_2 + '1'
             children_1.append(variable_i_children_1)
             children_2.append(variable_i_children_2)
-        return Offspring(children_1, children_2)
+        return OffspringRastrigin(children_1, children_2, None)
