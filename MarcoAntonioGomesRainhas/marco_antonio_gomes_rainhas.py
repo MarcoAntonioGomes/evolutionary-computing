@@ -7,7 +7,7 @@ import numpy as np
 from GeneticAlgorithmComponents.crossovers.cutandcrossfillcrossover import CutAndCrossfillCrossover
 from GeneticAlgorithmComponents.mutations.swapmutation import SwapMutation
 from GeneticAlgorithmComponents.selections.tournament import Tournament
-from n_queens_ga.nqueensga import NQueensGa
+from MarcoAntonioGomesRainhas.nqueensga import NQueensGa
 
 if __name__ == '__main__':
     start_time = time.time()

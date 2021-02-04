@@ -2,7 +2,7 @@ from GeneticAlgorithmComponents.crossovers.crossoverwithonecutoffpoint import Cr
 from GeneticAlgorithmComponents.mutations.bitflip import BipFlip
 from GeneticAlgorithmComponents.selections.roulette import Roulette
 from GeneticAlgorithmComponents.selections.tournament import Tournament
-from rastrigin_function_ga.rastrigin_ga import RastriginGa
+from MarcoAntonioGomesRastrigin.rastrigin_ga import RastriginGa
 
 
 def marco_antonio(nvar, ncal):
@@ -40,4 +40,4 @@ def marco_antonio(nvar, ncal):
 
 
 if __name__ == '__main__':
-    marco_antonio(1, 10000)
+    marco_antonio(10, 10000)

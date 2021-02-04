@@ -4,7 +4,7 @@ from GeneticAlgorithmComponents.mutations.mutation import Mutation
 from GeneticAlgorithmComponents.selections.selectionmethods import SelectionMethods
 from random import SystemRandom
 import math
-from rastrigin_function_ga.rastrigin_subject import RastriginSubject
+from MarcoAntonioGomesRastrigin.rastrigin_subject import RastriginSubject
 
 '''
 Function Rastrigin Minimization Genetic Algorithm 

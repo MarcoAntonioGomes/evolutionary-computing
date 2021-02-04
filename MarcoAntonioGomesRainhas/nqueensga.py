@@ -7,8 +7,7 @@ from GeneticAlgorithmComponents.crossovers.crossover import Crossover
 from GeneticAlgorithmComponents.geneticalgorithmstructure import GeneticAlgorithmStructure
 from GeneticAlgorithmComponents.mutations.mutation import Mutation
 from GeneticAlgorithmComponents.selections.selectionmethods import SelectionMethods
-from n_queens_ga.nqueensubject import NQueenSubject
-
+from MarcoAntonioGomesRainhas.nqueensubject import NQueenSubject
 
 '''
 
@@ -24,6 +23,7 @@ def calculate_max_quantity_of_xeques():
 
 
 class NQueensGa(GeneticAlgorithmStructure):
+    # cmax = Max number of collision + 1
     c_max = 29
 
     def __init__(self, population_size: int, maximum_number_of_generations: int, crossover_probability: float,
@@ -43,7 +43,6 @@ class NQueensGa(GeneticAlgorithmStructure):
             candidate = sample(range(0, 8), 8)
             self.population.append(NQueenSubject(candidate, self.calculate_candidate_fitness(candidate)))
             count = count + 1
-
 
     def calculate_candidate_fitness(self, solution):
         f = 0
@@ -93,8 +92,6 @@ class NQueensGa(GeneticAlgorithmStructure):
             self.calculate_average_fitness_per_generation()
             count = count + 1
 
-
-
     def select_survivors(self):
         self.population.sort(key=lambda x: x.fitness, reverse=True)
         self.population.pop()
@@ -122,7 +119,7 @@ class NQueensGa(GeneticAlgorithmStructure):
             board = np.zeros((8, 8), dtype=str)
             board.fill("*")
             for j in range(8):
-                board[self.best_solution.queens_positions[j], j] = "X"
+                board[self.best_solution.queens_positions[j], j] = "Q"
             print("FITNESS (Numero de Colisões): ", self.best_solution.fitness - self.c_max)
             print("QUANTIDADE MÁXIMA DE XEQUES DO TABULEIRO 8X8: ", int(self.quantity_of_xeques))
             print("GERAÇÃO DE CONVERGÊNCIA: ", self.convergence_generation)
@@ -138,7 +135,7 @@ class NQueensGa(GeneticAlgorithmStructure):
 
         if self.convergence_generation is None:
             return
-        t = [generation for generation in range(self.convergence_generation -1)]
+        t = [generation for generation in range(self.convergence_generation - 1)]
 
         fig, ax = plt.subplots()
         ax.plot(t, self.average_fitness)
