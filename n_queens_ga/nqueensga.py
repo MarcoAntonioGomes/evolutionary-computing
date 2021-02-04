@@ -10,6 +10,15 @@ from GeneticAlgorithmComponents.selections.selectionmethods import SelectionMeth
 from n_queens_ga.nqueensubject import NQueenSubject
 
 
+'''
+
+N-Queens Problem  Genetic Algorithm 
+developed by Marco Antônio Gomes
+GitHub: https://github.com/MarcoAntonioGomes/evolutionary-computing/tree/master
+
+'''
+
+
 def calculate_max_quantity_of_xeques():
     return (8 * (8 - 1)) / 2
 

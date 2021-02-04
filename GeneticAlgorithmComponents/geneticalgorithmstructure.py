@@ -6,6 +6,7 @@ from GeneticAlgorithmComponents.subjects.subject import Subject
 '''
 Genetic Algorithm Structure
 developed by Marco Antônio Gomes
+GitHub: https://github.com/MarcoAntonioGomes/evolutionary-computing/tree/master
 
 '''
 

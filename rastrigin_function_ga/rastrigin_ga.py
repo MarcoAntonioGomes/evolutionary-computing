@@ -4,8 +4,14 @@ from GeneticAlgorithmComponents.mutations.mutation import Mutation
 from GeneticAlgorithmComponents.selections.selectionmethods import SelectionMethods
 from random import SystemRandom
 import math
-
 from rastrigin_function_ga.rastrigin_subject import RastriginSubject
+
+'''
+Function Rastrigin Minimization Genetic Algorithm 
+developed by Marco Antônio Gomes
+GitHub: https://github.com/MarcoAntonioGomes/evolutionary-computing/tree/master
+
+'''
 
 
 def calculate_quantity_of_bits(precision: float, xmax: float, xmin: float):
@@ -53,6 +59,7 @@ class RastriginGa(GeneticAlgorithmStructure):
                                                         self.function_rastrigin(binary_string))))
             count = count + 1
 
+    # Calculate Rastrigin
     def function_rastrigin(self, binary_string: list[str]):
 
         sum = 0
@@ -62,6 +69,7 @@ class RastriginGa(GeneticAlgorithmStructure):
 
         return (10 * self.nvar) + sum
 
+    # Convert binary value to real
     def convert_binary_to_real(self, binary_value_in_xi):
         return self.xmin + ((self.xmax - self.xmin) * int(binary_value_in_xi, 2)) / ((self.quantity_of_bits ** 2) - 1)
 
@@ -78,6 +86,7 @@ class RastriginGa(GeneticAlgorithmStructure):
             father = None
             mother = None
 
+            # Select father and mother to reproduce with 50% using 2 select methods (Tournament/Roulette)
             if self.random.random() < 0.50:
                 self.selection.set_population(self.population)
                 mating_pool_1 = self.selection.select()
