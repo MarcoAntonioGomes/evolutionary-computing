@@ -1,9 +1,6 @@
-import math
-from random import random, seed
+from random import SystemRandom
 
 from GeneticAlgorithmComponents.mutations.mutation import Mutation
-import random
-from random import SystemRandom
 
 
 class SwapMutation(Mutation):

@@ -1,7 +1,5 @@
 from GeneticAlgorithmComponents.selections.selectionmethods import SelectionMethods
 from random import SystemRandom
-from operator import attrgetter
-
 from GeneticAlgorithmComponents.subjects.subject import Subject
 
 
@@ -22,7 +20,7 @@ class Roulette(SelectionMethods):
             r = float("{:.2f}".format(r))
             i = 0
             while subjects_probabilities[i] < r:
-                if i == len(subjects_probabilities)-1:
+                if i == len(subjects_probabilities) - 1:
                     break
                 i = i + 1
 
@@ -36,6 +34,7 @@ class Roulette(SelectionMethods):
         subjects_probabilities = list()
         previous_probability = 0.0
         for i in range(len(self.population)):
-            previous_probability = previous_probability + float("{:.2f}".format(self.population[i].fitness / fitness_total))
+            previous_probability = previous_probability + float(
+                "{:.2f}".format(self.population[i].fitness / fitness_total))
             subjects_probabilities.append(float("{:.2f}".format(previous_probability)))
         return subjects_probabilities

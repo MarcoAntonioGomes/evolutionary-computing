@@ -8,8 +8,8 @@ from rastrigin_function_ga.rastrigin_ga import RastriginGa
 def marco_antonio(nvar, ncal):
     population_size = 100
     maximum_number_of_generations = ncal / population_size
-    crossover_probability = 0.99
-    mutation_probability = 0.8
+    crossover_probability = 0.80
+    mutation_probability = 0.3
     mutation = BipFlip()
     crossover = CrossoverWithOneCutoffPoint()
     selection_1 = Tournament(10)
@@ -40,4 +40,4 @@ def marco_antonio(nvar, ncal):
 
 
 if __name__ == '__main__':
-    marco_antonio(10, 10000)
+    marco_antonio(1, 10000)

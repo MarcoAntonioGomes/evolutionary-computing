@@ -1,5 +1,4 @@
 import random
-from copy import deepcopy
 from random import sample
 
 import numpy as np

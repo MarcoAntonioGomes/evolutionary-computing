@@ -1,14 +1,17 @@
-from collections import defaultdict, deque
-
 from GeneticAlgorithmComponents.crossovers.crossover import Crossover
 from GeneticAlgorithmComponents.mutations.mutation import Mutation
 from GeneticAlgorithmComponents.selections.selectionmethods import SelectionMethods
 from GeneticAlgorithmComponents.subjects.subject import Subject
 
+'''
+Genetic Algorithm Structure
+developed by Marco Antônio Gomes
+
+'''
+
 
 class GeneticAlgorithmStructure:
     population = list[Subject]
-
 
     def __init__(self, population_size: int,
                  maximum_number_of_generations: int,

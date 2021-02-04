@@ -1,10 +1,7 @@
-from random import randint
-
-from GeneticAlgorithmComponents.selections.selectionmethods import SelectionMethods
 from operator import attrgetter
-
-from GeneticAlgorithmComponents.subjects.subject import Subject
 from random import SystemRandom
+from GeneticAlgorithmComponents.selections.selectionmethods import SelectionMethods
+from GeneticAlgorithmComponents.subjects.subject import Subject
 
 
 class Tournament(SelectionMethods):

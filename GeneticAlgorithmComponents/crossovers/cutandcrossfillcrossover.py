@@ -1,11 +1,10 @@
+from random import SystemRandom
+from random import seed
+
+import numpy as np
+
 from GeneticAlgorithmComponents.crossovers.crossover import Crossover
 from GeneticAlgorithmComponents.offspring import Offspring
-import numpy as np
-import math
-from random import seed
-from random import random
-from random import SystemRandom
-import random
 
 
 class CutAndCrossfillCrossover(Crossover):
