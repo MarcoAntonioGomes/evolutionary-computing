@@ -31,3 +31,5 @@ if __name__ == '__main__':
     n = 5
     print(bin(n)[2:].zfill(q))
     print(10**2)
+    print(np.random.randint(-100,100,10))
+    print(np.zeros(10))
