@@ -1,5 +1,7 @@
 import random
 from random import sample
+import numpy as np
+from numpy_ringbuffer import RingBuffer
 
 import numpy as np
 
@@ -33,3 +35,8 @@ if __name__ == '__main__':
     print(10**2)
     print(np.random.randint(-100,100,10))
     print(np.zeros(10))
+
+    r = RingBuffer(capacity=4, dtype=np.bool)
+    r.append(True)
+    r.appendleft(False)
+    print(r)  # array([False, True])
