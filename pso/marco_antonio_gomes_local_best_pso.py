@@ -23,7 +23,7 @@ if __name__ == '__main__':
     w = 0.729
     c1 = 1.49445
     c2 = 1.49445
-    x = 1
+    x = 0.729
     swarm = list()
     for i in range(population_size):
         swarm.append(Particle())
@@ -31,6 +31,6 @@ if __name__ == '__main__':
     target_error = 10**(-2)
 
     local_best_pso = LocalBestPso(w, c1, c2, x, max_epochs, swarm, population_size,
-                                   target, target_error, sphere_function)
+                                   target, target_error, function_rastrigin)
 
     local_best_pso.run()
