@@ -3,10 +3,15 @@ from pymoo.factory import get_problem
 from pymoo.optimize import minimize
 from pymoo.visualization.scatter import Scatter
 import autograd.numpy as anp
+import numpy as np
+
 
 if __name__ == '__main__':
 
-    a = anp.array([1,2,3])
-    b = [1, 2, 3]
+    a = anp.array([[ 8,  9, 10, 11],
+       [ 4,  5,  6,  7],
+       [ 0,  1,  2,  3]])
 
-    c = a * b
+    print( np.sum(a, axis=1) )
+
+
