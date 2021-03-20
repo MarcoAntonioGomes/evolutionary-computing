@@ -18,6 +18,8 @@ if __name__ == '__main__':
     # "five": exploring values for x configuration
     # "six": exploring values for x ton
 
+    # todo - revisar best ton (three, six)
+    
     run = "six"
 
     if run == "one":
