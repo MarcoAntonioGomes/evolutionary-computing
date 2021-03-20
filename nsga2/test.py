@@ -1,17 +1,22 @@
-from pymoo.algorithms.nsga2 import NSGA2
-from pymoo.factory import get_problem
-from pymoo.optimize import minimize
-from pymoo.visualization.scatter import Scatter
-import autograd.numpy as anp
 import numpy as np
 
+f = 0
+for i in range(30):
+    f = f + ((13302320) / ((1 + 0.1) ** (i+1)))
+# 3427.28
+print(0.04 * 128827110)
+print((386905.76 * 42.53) - (0.04 * 128827110))
 
-if __name__ == '__main__':
+f = f-128827110
 
-    a = anp.array([[ 8,  9, 10, 11],
-       [ 4,  5,  6,  7],
-       [ 0,  1,  2,  3]])
-
-    print( np.sum(a, axis=1) )
+print(f)
 
 
+P = 4693.28*3615*0.3*0.01157
+print(P)
+
+i = 15797*(P**0.82)
+print(i)
+
+e = P*0.75*8760/1000
+print(e)
