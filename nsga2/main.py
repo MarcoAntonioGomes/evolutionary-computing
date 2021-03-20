@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     res = minimize(problem,
                    algorithm,
-                   ('n_gen', 200),
+                   ('n_gen', 400),
                    seed=1,
                    verbose=False)
 

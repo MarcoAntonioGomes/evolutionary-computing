@@ -9,7 +9,7 @@ class WTE(Problem):
     def __init__(self):
         super().__init__(n_var=6, n_obj=2, n_constr=1, type_var=anp.double)
         self.xl = anp.array([0, 0, 0, 0, 0, 0])
-        self.xu = anp.array([500, 500, 500, 500, 500, 500])
+        self.xu = anp.array([955, 955, 955, 955, 955, 955])
         self.vcl = anp.array([712, 2729, 1921, 2490, 8193, 8633])
 
     def investment(self, p):
@@ -34,11 +34,19 @@ class WTE(Problem):
 
         i = self.investment(p)
 
-        price = 100.00
+        price = 45.00
+        years = 30
+        rate = 0.1
 
-        f2 = -((-f1 * price) - i - (0.04 * i))
+        # f2 = -(((-f1 * price) * 30) - (30 * (0.04 * i)) - i)
+        f2 = 0
 
-        g1 = (- np.sum(x, axis=1) + 500) / 500
+        for t in range(years):
+            f2 = f2 +(((-f1 * price) - (0.04 * i))/((1 + rate)**(t+1)))
+
+        f2 = -(f2 - i)
+
+        g1 = (- np.sum(x, axis=1) + 955) / 955
 
         out["F"] = anp.column_stack([f1, f2])
         out["G"] = anp.column_stack([g1])
