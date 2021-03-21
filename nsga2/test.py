@@ -1,22 +1,19 @@
-import numpy as np
+from pymoo.algorithms.nsga2 import NSGA2
+from pymoo.factory import get_problem
+from pymoo.optimize import minimize
+from pymoo.visualization.scatter import Scatter
 
-f = 0
-for i in range(30):
-    f = f + ((13302320) / ((1 + 0.1) ** (i+1)))
-# 3427.28
-print(0.04 * 128827110)
-print((386905.76 * 42.53) - (0.04 * 128827110))
+problem = get_problem("zdt1")
 
-f = f-128827110
+algorithm = NSGA2(pop_size=100)
 
-print(f)
+res = minimize(problem,
+               algorithm,
+               ('n_gen', 200),
+               seed=1,
+               verbose=False)
 
-
-P = 4693.28*3615*0.3*0.01157
-print(P)
-
-i = 15797*(P**0.82)
-print(i)
-
-e = P*0.75*8760/1000
-print(e)
+plot = Scatter()
+plot.add(problem.pareto_front(), plot_type="line", color="black", alpha=0.7)
+plot.add(res.F, color="red")
+plot.show()

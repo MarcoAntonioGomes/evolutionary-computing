@@ -13,12 +13,13 @@ from nsga2 import WTE3
 if __name__ == '__main__':
     # "one": running for first year investment
     # "two": running for 30 years
-    # "three": running best ton
+    # "three": running best ton less costs
     # "four": running mono objective
     # "five": exploring values for x configuration
     # "six": exploring values for x ton
+    # "seven": change f
 
-    run = "three"
+    run = "seven"
 
     if run == "one":
         # first analysis considering best configuration (and considering first year)
@@ -86,15 +87,16 @@ if __name__ == '__main__':
                        seed=None,
                        verbose=True)
         fig, ax = plt.subplots()
-        data = np.transpose(-res.F)
-        ax.scatter(data[0] / 1000, data[1] / 1E6)
+        data = np.transpose(res.F)
+        ax.scatter(-data[0] / 1000, data[1])
         ax.set_title("Operação da planta WtE para 25 anos")
         ax.set_xlabel('Geração em GWh/ano')
-        ax.set_ylabel('Valor Presente Líquido (milhões) USD)')
+        # ax.set_ylabel('Valor Presente Líquido (milhões) USD)')
+        ax.set_ylabel('Custo da planta em 25 anos (USD)')
         fig2, ax2 = plt.subplots()
         print(res.X)
         data2 = np.transpose(res.X)
-        ax2.scatter(data2, data[0] / 1000)
+        ax2.scatter(data2, -data[0] / 1000)
         ax2.set_title("Operação da planta WtE para 25 anos")
         ax2.set_xlabel('Toneladas RSU/dia')
         ax2.set_ylabel('Geração em GWh/ano')
@@ -147,4 +149,41 @@ if __name__ == '__main__':
                         ylabel='Total em ton/dia')
         gen_sorted.plot(0, 1, 'scatter', title="Operação da planta WtE", xlabel='Geração em MWh/ano',
                         ylabel='Valor Presente Líquido (USD)')
+        plt.show()
+
+    elif run == "seven":
+        problem = WTE(first=False)
+        algorithm = NSGA2(pop_size=300)
+        res = minimize(problem,
+                       algorithm,
+                       ('n_gen', 500),
+                       seed=None,
+                       verbose=True)
+        power = problem.calculate_rsu_plant_power(res.X, 0.22)
+        investment = problem.investment(power)
+        fig, ax = plt.subplots()
+        data = np.transpose(res.F)
+        print(res.X)
+        ax.scatter(-data[0] / 1000, data[1] / 1E6)
+        ax.set_title("Operação da planta WtE para 25 anos")
+        ax.set_xlabel('Geração em GWh/ano')
+        ax.set_ylabel('Custo da Planta (milhões USD)')
+        plt.show()
+        fig2, ax2 = plt.subplots()
+        ax2.scatter(power, investment / 1E6)
+        ax2.set_title("Investimento para a planta WtE")
+        ax2.set_xlabel('Potência (kW)')
+        ax2.set_ylabel('Investimento (milhões USD)')
+        plt.show()
+        best = np.sum(res.X, axis=1)
+        print(len(res.X))
+        fig3, ax3 = plt.subplots(2, 1)
+        ax3[0].set_title("Comportamento dos objetivos em relação ao total de toneladas RSU/dia")
+        ax3[0].scatter(best, -data[0] / 1000)
+        ax3[0].grid()
+        ax3[0].set_ylabel('Geração em GWh/ano')
+        ax3[1].scatter(best, data[1] / 1E6)
+        ax3[1].set_ylabel('Custo da Planta (milhões USD)')
+        ax3[1].set_xlabel('ton RSU/dia')
+        ax3[1].grid()
         plt.show()

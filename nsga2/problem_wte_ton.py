@@ -12,7 +12,7 @@ class WTE2(Problem):
         self.xu = anp.array([1600])
         # organica/ papel/ texteis/ plastico
         self.vcl = anp.array([712, 2729, 1921, 8193])
-        self.xi = anp.array([0.453, 0.104, 0.04, 0.168])
+        self.xi = anp.array([0.62, 0.11, 0.04, 0.9])
 
     def investment(self, p):
         i = (15797) * (p ** 0.82)
@@ -58,12 +58,14 @@ class WTE2(Problem):
 
         f2 = -(f2 - i)
 
+        f3 = years * (0.04 * i) + i
+
         # div = np.zeros(len(x))
         # for d in range(len(x)):
         #     div[d] = vcl_total[d] / x[d]
         #
         # g1 = (div - 8373.6) / 8373.6
 
-        out["F"] = anp.column_stack([f1, f2])
+        out["F"] = anp.column_stack([f1, f3])  # f2
         # out["G"] = anp.column_stack([g1])
         # out["G"] = - out["G"]

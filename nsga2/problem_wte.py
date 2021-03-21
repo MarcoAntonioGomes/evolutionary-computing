@@ -8,10 +8,10 @@ class WTE(Problem):
 
     def __init__(self, first=False):
         super().__init__(n_var=6, n_obj=2, n_constr=3, type_var=anp.double)
-        self.xl = anp.array([100, 100, 100, 100, 100, 100])
-        self.xu = anp.array([800, 800, 800, 800, 800, 800])
-        # self.xl = anp.array([640, 80, 0, 0, 160, 0])
-        # self.xu = anp.array([1600, 800, 400, 400, 800, 400])
+        # self.xl = anp.array([100, 100, 100, 100, 100, 100])
+        # self.xu = anp.array([800, 800, 800, 800, 800, 800])
+        self.xl = anp.array([640, 80, 0, 0, 160, 0])
+        self.xu = anp.array([1600, 800, 400, 400, 800, 400])
         self.vcl = anp.array([712, 2729, 1921, 2490, 8193, 8633])
         self.first = first
 
@@ -52,10 +52,12 @@ class WTE(Problem):
 
             f2 = -(f2 - i)
 
-        g1 = (- np.sum(x, axis=1) + 800) / 800
+        f3 = years * (0.04 * i) + i
+
+        g1 = (- np.sum(x, axis=1) + 1600) / 1600
         g2 = (np.sum(x, axis=1) - 500) / 500
         g3 = ((np.sum(np.multiply(x, (self.vcl * 4.1868)), axis=1) / np.sum(x, axis=1)) - 8373.6) / 8373.6
 
-        out["F"] = anp.column_stack([f1, f2])
+        out["F"] = anp.column_stack([f1, f3])
         out["G"] = anp.column_stack([g1, g2, g3])
         out["G"] = - out["G"]
