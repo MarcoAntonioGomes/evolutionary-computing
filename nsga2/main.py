@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import json
 from pymoo.algorithms.so_genetic_algorithm import GA
 from pymoo.algorithms.nsga2 import NSGA2
 from pymoo.optimize import minimize
@@ -9,6 +10,25 @@ from pymoo.interface import sample
 from nsga2 import WTE
 from nsga2 import WTE2
 from nsga2 import WTE3
+from pymoo.operators.crossover.simulated_binary_crossover import SimulatedBinaryCrossover
+
+
+def calc_npv_value(x, power):
+    price = 51.01
+    years = 25
+    rate = 0.065  # 0.1
+
+    i = problem.investment(power)
+    f1 = ((power * 0.8 * 8760) / 1000)
+
+    f2 = 0
+    for t in range(years):
+        f2 = f2 + (((f1 * price) - (0.04 * i)) / ((1 + rate) ** (t + 1)))
+
+    f2 = f2 - i
+
+    return f2
+
 
 if __name__ == '__main__':
     # "one": running for first year investment
@@ -17,9 +37,8 @@ if __name__ == '__main__':
     # "four": running mono objective
     # "five": exploring values for x configuration
     # "six": exploring values for x ton
-    # "seven": change f
 
-    run = "seven"
+    run = "three"
 
     if run == "one":
         # first analysis considering best configuration (and considering first year)
@@ -53,46 +72,63 @@ if __name__ == '__main__':
     elif run == "two":
         # second analysis considering best configuration (for all years)
         problem = WTE(first=False)
-        algorithm = NSGA2(pop_size=100)
+        algorithm = NSGA2(pop_size=100, crossover=SimulatedBinaryCrossover(eta=15, prob=0.95))
         res = minimize(problem,
                        algorithm,
                        ('n_gen', 500),
-                       seed=None,
+                       seed=1,
                        verbose=True)
-        power = problem.calculate_rsu_plant_power(res.X, 0.3)
+
+        x_total = np.sum(res.X, axis=1)
+        vcl_total = problem.calc_vcl_total(res.X, x_total)
+        power = problem.calculate_rsu_plant_power(x_total, vcl_total, 0.22)
         investment = problem.investment(power)
         fig, ax = plt.subplots()
-        data = np.transpose(-res.F)
-        print(-res.F)
+        data = np.transpose(res.F)
         print(res.X)
-        ax.scatter(data[0] / 1000, data[1] / 1E6)
-        ax.set_title("Operação da planta WtE para 30 anos")
+        ax.scatter(-data[0] / 1000, data[1] / 1E6)
+        ax.set_title("Operação da planta WtE para 25 anos")
         ax.set_xlabel('Geração em GWh/ano')
-        ax.set_ylabel('Valor Presente Líquido (milhões USD)')
+        ax.set_ylabel('Custo da Planta (milhões USD)')
+        ax.grid()
         plt.show()
         fig2, ax2 = plt.subplots()
         ax2.scatter(power, investment / 1E6)
         ax2.set_title("Investimento para a planta WtE")
         ax2.set_xlabel('Potência (kW)')
         ax2.set_ylabel('Investimento (milhões USD)')
+        ax2.grid()
         plt.show()
+        print(len(res.X))
+        fig3, ax3 = plt.subplots(2, 1)
+        ax3[0].set_title("Comportamento dos objetivos em relação ao total de toneladas RSU/dia")
+        ax3[0].scatter(x_total, -data[0] / 1000)
+        ax3[0].grid()
+        ax3[0].set_ylabel('Geração em GWh/ano')
+        ax3[1].scatter(x_total, data[1] / 1E6)
+        ax3[1].set_ylabel('Custo da Planta (milhões USD)')
+        ax3[1].set_xlabel('ton RSU/dia')
+        ax3[1].grid()
+        plt.show()
+        npv = calc_npv_value(res.X, power)
+        a="a"
 
     elif run == "three":
         problem = WTE2()
         algorithm = NSGA2(pop_size=100)
-
         res = minimize(problem,
                        algorithm,
                        ('n_gen', 500),
-                       seed=None,
+                       seed=1,
                        verbose=True)
         fig, ax = plt.subplots()
         data = np.transpose(res.F)
-        ax.scatter(-data[0] / 1000, data[1])
+        ax.scatter(-data[0] / 1000, data[1]/1E6)
         ax.set_title("Operação da planta WtE para 25 anos")
         ax.set_xlabel('Geração em GWh/ano')
         # ax.set_ylabel('Valor Presente Líquido (milhões) USD)')
-        ax.set_ylabel('Custo da planta em 25 anos (USD)')
+        ax.grid()
+        ax.set_ylabel('Custo da planta em 25 anos (milhões USD)')
         fig2, ax2 = plt.subplots()
         print(res.X)
         data2 = np.transpose(res.X)
@@ -100,6 +136,7 @@ if __name__ == '__main__':
         ax2.set_title("Operação da planta WtE para 25 anos")
         ax2.set_xlabel('Toneladas RSU/dia')
         ax2.set_ylabel('Geração em GWh/ano')
+        ax2.grid()
         plt.show()
 
     elif run == "four":
@@ -151,39 +188,5 @@ if __name__ == '__main__':
                         ylabel='Valor Presente Líquido (USD)')
         plt.show()
 
-    elif run == "seven":
-        problem = WTE(first=False)
-        algorithm = NSGA2(pop_size=300)
-        res = minimize(problem,
-                       algorithm,
-                       ('n_gen', 500),
-                       seed=None,
-                       verbose=True)
-        power = problem.calculate_rsu_plant_power(res.X, 0.22)
-        investment = problem.investment(power)
-        fig, ax = plt.subplots()
-        data = np.transpose(res.F)
-        print(res.X)
-        ax.scatter(-data[0] / 1000, data[1] / 1E6)
-        ax.set_title("Operação da planta WtE para 25 anos")
-        ax.set_xlabel('Geração em GWh/ano')
-        ax.set_ylabel('Custo da Planta (milhões USD)')
-        plt.show()
-        fig2, ax2 = plt.subplots()
-        ax2.scatter(power, investment / 1E6)
-        ax2.set_title("Investimento para a planta WtE")
-        ax2.set_xlabel('Potência (kW)')
-        ax2.set_ylabel('Investimento (milhões USD)')
-        plt.show()
-        best = np.sum(res.X, axis=1)
-        print(len(res.X))
-        fig3, ax3 = plt.subplots(2, 1)
-        ax3[0].set_title("Comportamento dos objetivos em relação ao total de toneladas RSU/dia")
-        ax3[0].scatter(best, -data[0] / 1000)
-        ax3[0].grid()
-        ax3[0].set_ylabel('Geração em GWh/ano')
-        ax3[1].scatter(best, data[1] / 1E6)
-        ax3[1].set_ylabel('Custo da Planta (milhões USD)')
-        ax3[1].set_xlabel('ton RSU/dia')
-        ax3[1].grid()
-        plt.show()
+
+

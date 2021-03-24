@@ -10,25 +10,22 @@ class WTE2(Problem):
         super().__init__(n_var=1, n_obj=2, n_constr=0, type_var=anp.double)
         self.xl = anp.array([250])
         self.xu = anp.array([1600])
-        # organica/ papel/ texteis/ plastico
-        self.vcl = anp.array([712, 2729, 1921, 8193])
-        self.xi = anp.array([0.62, 0.11, 0.04, 0.9])
+        # organica/ papel/ texteis/ plastico/ borracha
+        self.vcl = anp.array([712, 2729, 1921, 8193, 8633])
+        self.xi = anp.array([0.62, 0.11, 0.04, 0.168, 0.016])
 
     def investment(self, p):
         i = (15797) * (p ** 0.82)
         return i
 
-    def total_vcl_ton(self, x):
-        vcl_total = np.zeros(len(x))
-        for ton in range(len(x)):
-            vcl = 0
-            for k in range(len(self.xi)):
-                vcl = vcl + x[ton] * self.xi[k] * self.vcl[k]
-            vcl_total[ton] = vcl
-        return vcl_total * 4.1868
+    def total_vcl_ton(self):
+        vcl = 0
+        for k in range(len(self.xi)):
+            vcl = vcl + self.xi[k] * self.vcl[k] * 4.1868
+        return vcl
 
-    def calculate_rsu_plant_power(self, x, electric_recovery_rate):
-        p = x * electric_recovery_rate * 0.01157
+    def calculate_rsu_plant_power(self, x, vcl_total, electric_recovery_rate):
+        p = x * vcl_total * electric_recovery_rate * 0.01157
         return p
 
     def _evaluate(self, x, out, *args, **kwargs):
@@ -40,9 +37,9 @@ class WTE2(Problem):
 
         electric_recovery_rate = 0.22
 
-        vcl_total = self.total_vcl_ton(x)
+        vcl_total = self.total_vcl_ton()
 
-        p = self.calculate_rsu_plant_power(vcl_total, electric_recovery_rate)
+        p = self.calculate_rsu_plant_power(x, vcl_total, electric_recovery_rate)
         f1 = -((p * cf * h_year) / 1000)  # MWh/year
 
         i = self.investment(p)
