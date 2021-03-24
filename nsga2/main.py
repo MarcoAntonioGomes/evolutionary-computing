@@ -38,7 +38,7 @@ if __name__ == '__main__':
     # "five": exploring values for x configuration
     # "six": exploring values for x ton
 
-    run = "three"
+    run = "two"
 
     if run == "one":
         # first analysis considering best configuration (and considering first year)
@@ -111,7 +111,13 @@ if __name__ == '__main__':
         ax3[1].grid()
         plt.show()
         npv = calc_npv_value(res.X, power)
-        a="a"
+        fig4, ax4 = plt.subplots()
+        ax4.scatter(x_total, npv / 1E6)
+        ax4.set_title("Valor Presente Líquido")
+        ax4.set_xlabel('ton RSU/dia')
+        ax4.set_ylabel('VPL (milhões USD)')
+        ax4.grid()
+        plt.show()
 
     elif run == "three":
         problem = WTE2()

@@ -18,8 +18,17 @@ class WTE3(Problem):
         i = (15797) * (p ** 0.82)
         return i
 
-    def calculate_rsu_plant_power(self, x, electric_recovery_rate):
-        p = np.sum(np.multiply(x, (self.vcl * 4.1868)), axis=1) * electric_recovery_rate * 0.01157
+    def calc_vcl_total(self, x, x_total):
+        tam = (len(x_total), len(self.xl))
+        p_xi = np.zeros(tam)
+        for j in range(len(x_total)):
+            for i in range(len(self.xl)):
+                p_xi[j, i] = x[j, i] / x_total[j]
+        vcl_total = np.sum(np.multiply(p_xi, (self.vcl * 4.1868)), axis=1)
+        return vcl_total
+
+    def calculate_rsu_plant_power(self, x_total, vcl_total, electric_recovery_rate):
+        p = x_total * vcl_total * electric_recovery_rate * 0.01157
         return p
 
     def _evaluate(self, x, out, *args, **kwargs):
@@ -31,7 +40,12 @@ class WTE3(Problem):
 
         electric_recovery_rate = 0.22
 
-        p = self.calculate_rsu_plant_power(x, electric_recovery_rate)
+        x_total = np.sum(x, axis=1)
+
+        vcl_total = self.calc_vcl_total(x, x_total)
+
+        p = self.calculate_rsu_plant_power(x_total, vcl_total, electric_recovery_rate)
+
         f1 = ((p * cf * h_year) / 1000)  # MWh/year
 
         i = self.investment(p)
@@ -39,9 +53,6 @@ class WTE3(Problem):
         price = 51.01
         years = 25
         rate = 0.065  # 0.1
-
-        # calculo de receita/despesa para o primeiro ano
-        # f2 = -(((-f1 * price) * 30) - (30 * (0.04 * i)) - i)
 
         # calculo de NPV para vida util da planta
         f2 = 0
@@ -52,7 +63,7 @@ class WTE3(Problem):
 
         g1 = (- np.sum(x, axis=1) + 1600) / 1600
         g2 = (np.sum(x, axis=1) - 500) / 500
-        g3 = ((np.sum(np.multiply(x, (self.vcl * 4.1868)), axis=1) / np.sum(x, axis=1)) - 8373.6) / 8373.6
+        g3 = (vcl_total - 8373.6) / 8373.6
 
         gen = min(f1)
         out["F"] = f2
